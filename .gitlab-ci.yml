@@ -1,0 +1,109 @@
+image: docker:stable
+
+services:
+  - name: docker:dind
+    entrypoint: [ "env", "-u", "DOCKER_HOST" ]
+    command: [ "dockerd-entrypoint.sh" ]
+
+stages:
+  - build
+  - test
+  - docker
+  - deploy
+
+variables:
+  SERVER_IP: ip
+  SERVER_STAGING: user@ip
+  SERVER_PRODUCTION: user@ip
+  CONTAINER_IMAGE: registry.gitlab.com/$CI_PROJECT_PATH
+  DOCKER_HOST: tcp://docker:2375
+  DOCKER_DRIVER: overlay2
+
+cache:
+  paths:
+    - node_modules
+
+node:
+  stage: build
+  image: node:lts
+  script:
+    - npm install
+
+test:
+  stage: test
+  image: node:lts
+  script:
+    - npm run test
+
+build staging:
+  stage: docker
+  script:
+    - docker login --username gitlab-ci-token --password $CI_JOB_TOKEN registry.gitlab.com
+    - docker pull $CONTAINER_IMAGE:staging || true
+    - docker build --cache-from $CONTAINER_IMAGE:staging --target production --tag $CONTAINER_IMAGE:$CI_COMMIT_SHA --tag $CONTAINER_IMAGE:staging .
+    - docker push $CONTAINER_IMAGE:$CI_COMMIT_SHA
+    - docker push $CONTAINER_IMAGE:staging
+  only:
+    - staging
+
+build production:
+  stage: docker
+  script:
+    - docker login --username gitlab-ci-token --password $CI_JOB_TOKEN registry.gitlab.com
+    - docker pull $CONTAINER_IMAGE:latest || true
+    - docker build --cache-from $CONTAINER_IMAGE:latest --target production --tag $CONTAINER_IMAGE:$CI_COMMIT_SHA --tag $CONTAINER_IMAGE:latest .
+    - docker push $CONTAINER_IMAGE:$CI_COMMIT_SHA
+    - docker push $CONTAINER_IMAGE:latest
+  only:
+    - master
+
+staging:
+  stage: deploy
+  script:
+    # Install or use ssh client
+    - 'which ssh-agent || ( apk add --no-cache openssh-client )'
+    - eval $(ssh-agent -s)
+    # Create ssh directory
+    - mkdir -p /root/.ssh
+    # Add Private Key
+    - echo "$SSH_PRIVATE_KEY" | tr -d '\r' | dd of=/root/.ssh/id_rsa
+    # Set permissions
+    - chmod 700 /root/.ssh
+    - chmod 600 /root/.ssh/id_rsa
+    # Add key to client
+    - ssh-add /root/.ssh/id_rsa
+    # Write private server's key in the known hosts
+    - ssh-keyscan $SERVER_IP >> /root/.ssh/known_hosts
+    - chmod 644 /root/.ssh/known_hosts
+    # Run SSH commands
+    # - ssh $SERVER_STAGING "docker login --username gitlab-ci-token --password $CI_JOB_TOKEN registry.gitlab.com && docker pull $CONTAINER_IMAGE:staging"
+    # - ssh $SERVER_STAGING "docker stop sapper; docker rm sapper" || true # Skip if container does not exist & return an error
+    # - ssh $SERVER_STAGING "docker run --name sapper --network server --restart always --memory 200M -d $CONTAINER_IMAGE:staging"
+  only:
+    - staging
+
+production:
+  stage: deploy
+  script:
+    # Install or use ssh client
+    - 'which ssh-agent || ( apk add --no-cache openssh-client )'
+    - eval $(ssh-agent -s)
+    # Create ssh directory
+    - mkdir -p /root/.ssh
+    # Add Private Key
+    - echo "$SSH_PRIVATE_KEY" | tr -d '\r' | dd of=/root/.ssh/id_rsa
+    # Set permissions
+    - chmod 700 /root/.ssh
+    - chmod 600 /root/.ssh/id_rsa
+    # Add key to client
+    - ssh-add /root/.ssh/id_rsa
+    # Write private server's key in the known hosts
+    - ssh-keyscan $SERVER_IP >> /root/.ssh/known_hosts
+    - chmod 644 /root/.ssh/known_hosts
+    # Run SSH commands
+    # - ssh $SERVER_PRODUCTION "docker login --username gitlab-ci-token --password $CI_JOB_TOKEN registry.gitlab.com && docker pull $CONTAINER_IMAGE:latest"
+    # - ssh $SERVER_PRODUCTION "docker stop sapper; docker rm sapper" || true # Skip if container does not exist & return an error
+    # - ssh $SERVER_PRODUCTION "docker run --name sapper --network server --restart always --memory 200M -d $CONTAINER_IMAGE:latest"
+  when: manual
+  only:
+    - master

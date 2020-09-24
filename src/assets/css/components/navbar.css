@@ -1,0 +1,13 @@
+nav.navbar {
+  @apply bg-primary;
+  /* transform: translate(0, calc(-100% - 1rem)); */
+  /* transition: transform 0.4s, background-color 0.4s; */
+}
+
+nav.navbar.show {
+  transform: none;
+}
+
+nav.navbar.fill {
+  @apply bg-primary;
+}

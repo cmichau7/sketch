@@ -1,0 +1,83 @@
+.menu {
+  @apply inline-block cursor-pointer bg-transparent border-0 m-0 p-2 overflow-visible;
+  outline: 0px solid transparent;
+}
+
+.menu .menu-box {
+  @apply relative inline-block w-8 h-4;
+}
+
+.menu .menu-text-menu,
+.menu .menu-text-close {
+  transition: opacity 0.5s ease;
+}
+
+.menu .menu-text-close,
+.menu.open .menu-text-menu {
+  opacity: 0;
+}
+
+.menu .menu-text-menu,
+.menu.open .menu-text-close {
+  opacity: 1;
+}
+
+.menu .menu-inner {
+  display: block;
+  top: 50%;
+
+  transition: transform 0.25s ease;
+}
+
+.menu .menu-inner,
+.menu .menu-inner::before,
+.menu .menu-inner::after {
+  @apply absolute w-8 h-1 bg-white rounded;
+}
+
+.menu .menu-inner::before,
+.menu .menu-inner::after {
+  content: '';
+  display: block;
+
+  transition: top 0.25s 0.2s ease, bottom 0.25s 0.2s ease,
+    opacity 0.25s 0.2s ease;
+}
+
+.menu .menu-inner::before {
+  top: -0.75rem;
+}
+
+.menu .menu-inner::after {
+  bottom: -0.75rem;
+}
+
+.menu.open .menu-inner,
+.menu.open .menu-inner::before,
+.menu.open .menu-inner::after {
+  @apply bg-white;
+}
+
+.menu.open .menu-inner {
+  transition: transform 0.25s 0.2s ease;
+}
+
+.menu.open .menu-inner {
+  transform: rotate(45deg);
+}
+
+.menu.open .menu-inner.cross {
+  transform: rotate(-45deg);
+}
+
+.menu.open .menu-inner::before {
+  top: 0;
+  opacity: 0;
+  transition: top 0.25s ease, opacity 0.25s ease;
+}
+
+.menu.open .menu-inner::after {
+  bottom: 0;
+  opacity: 0;
+  transition: bottom 0.25s ease, opacity 0.25s ease;
+}

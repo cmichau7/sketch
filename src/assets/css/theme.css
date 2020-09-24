@@ -1,0 +1,10 @@
+@import "tailwindcss/base";
+
+@import "./core/reboot.css";
+@import "./core/typography.css";
+
+@import "./components/menu.css";
+@import "./components/navbar.css";
+
+@import "tailwindcss/components";
+@import "tailwindcss/utilities";

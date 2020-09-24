@@ -1,0 +1,47 @@
+# GitIgnore
+
+# Env
+.env
+
+# Generated
+build
+dist
+
+# Tests
+cypress
+
+# NodeJS
+node_modules
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# MAC
+.DS_Store
+.DS_Store?
+._*
+
+# Windows
+Thumbs.db
+ehthumbs.db
+
+# Netbeans
+nbproject/*
+
+# JetBrains
+.idea
+
+# Eclipse
+/.cache
+.project
+/.settings
+.buildpath
+
+# VS Code
+.vscode
+
+# CTags
+tags
+
+# Misc
+.ignore
