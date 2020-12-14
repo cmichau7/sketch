@@ -6,7 +6,7 @@ import { ReaderGroup, ReaderGroupModel } from "./reader-group";
 import { Score, ScoreModel } from "./score";
 import { Note, NoteModel } from "./note";
 import { Flag, FlagModel } from "./flag";
-import { ApplicantFile, ApplicantFileModel } from "./applicant-file";
+import { ApplicantFile, ApplicantFileModel } from "./applicantFile";
 
 export class ApplicantModel extends BaseModel {
   applicant_id: number;
@@ -95,14 +95,14 @@ export class ApplicantModel extends BaseModel {
         to: "admissions_reader_group.group_id",
       },
     },
-    applicantFile: {
-      relation: Model.HasManyRelation,
-      modelClass: ApplicantFile,
-      join: {
-        from: "admissions_applicant.applicant_id",
-        to: "admissions_applicant_file.applicant_id",
-      },
-    },
+    // files: {
+    //   relation: Model.HasManyRelation,
+    //   modelClass: ApplicantFile,
+    //   join: {
+    //     from: "admissions_applicant.applicant_id",
+    //     to: "admissions_applicant_file.applicant_id",
+    //   },
+    // },
     scores: {
       relation: Model.HasManyRelation,
       modelClass: Score,

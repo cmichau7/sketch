@@ -34,7 +34,9 @@
 
       return score;
     });
-    data.pdf = "/sample.pdf";
+    
+    console.log(applicant.files);
+    data.pdf = applicant.files;
     applicant.set(data);
 
     const groupId = data.group_id;

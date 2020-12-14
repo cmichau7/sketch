@@ -3,19 +3,19 @@ import { BaseModel } from "./base";
 
 // import { ApplicantFile } from "./applicant-file";
 
-export class FlagModel extends BaseModel {
-  flag_id: number;
-  entity_type: string;
-  entity_id: number;
-  reason: string;
-  proxy_id: number;
-  deleted_by: number;
-  deleted_reason: string;
-  file_id: number | string;
+export class FileModel extends BaseModel {
+  file_id: number;
+  filename: string;
+  file_num: number;
+  path: string;
+  applicant_id: number;
+  type: string;
+  subtype: string;
+  additional: string;
 
   // Table name is the only required property.
-  static tableName = "admissions_flag";
-  static idColumn = "flag_id";
+  static tableName = "admissions_applicant_file";
+  static idColumn = "file_id";
 
   // This object defines the relations to other models.
   // static relationMappings = (): RelationMappings => ({
@@ -30,4 +30,4 @@ export class FlagModel extends BaseModel {
   // });
 }
 
-export const Flag = FlagModel.bindKnex(admissions);
+export const File = FileModel.bindKnex(admissions);

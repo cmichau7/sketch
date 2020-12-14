@@ -18,7 +18,9 @@ const dev = NODE_ENV === "development";
 
 const FileStore = sessionFileStore(session);
 
-const app = express().use(
+const app = express()
+.use('/pdfs', sirv('pdfs', { dev }))
+.use(
   bodyParser.json(),
   session({
     secret: SESSION_SECRET,

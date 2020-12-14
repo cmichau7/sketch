@@ -1,14 +1,14 @@
 const {
   // Admissions DB
   DB_CLIENT = "mysql2",
-  DB_HOST = "mariadb",
+  DB_HOST = "localhost",
   DB_DATABASE = "elentra_adm",
   DB_USER = "elentra",
   DB_PASSWORD = "password",
 
   // Auth DB
   DB_AUTH_CLIENT = "mysql2",
-  DB_AUTH_HOST = "mariadb",
+  DB_AUTH_HOST = "localhost",
   DB_AUTH_DATABASE = "elentra_auth",
   DB_AUTH_USER = "elentra",
   DB_AUTH_PASSWORD = "password",

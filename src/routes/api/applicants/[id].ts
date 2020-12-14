@@ -25,7 +25,7 @@ export async function get(req: Request, res: Response): Promise<void> {
       .select("a.applicant_id", "a.reference_number", "rg.group_id")
       .where("a.reference_number", id)
       .joinRelated("readerGroup", { alias: "rg" })
-      .withGraphJoined("[scores, flags, notes]")
+      .withGraphJoined("[scores, flags, notes, files]")
       .modifyGraph("scores", (builder) =>
         builder
           .select(
@@ -40,6 +40,9 @@ export async function get(req: Request, res: Response): Promise<void> {
       )
       .modifyGraph("flags", (builder) => builder.where("deleted_date", null))
       .modifyGraph("notes", (builder) => builder.where("deleted_date", null))
+      .modifyGraph("files", (builder) =>
+        builder.where("subtype", "detailsketch-topchoices")
+      )
       .first()) as ApplicantModel & ReaderGroupModel;
 
     if (applicant.scores) {

@@ -56,9 +56,9 @@ CMD [ "run", "develop" ]
 FROM node:lts-slim AS production
 
 ARG DB_CLIENT=mysql2
-ARG DB_HOST=mariadb
+ARG DB_HOST=localhost:33010
 ARG DB_DATABASE=elentra_adm
-ARG DB_USER=elentra
+ARG DB_USER=root
 ARG DB_PASSWORD=password
 
 ENV NODE_ENV=production \
