@@ -1,6 +1,5 @@
 <script>
   import { stores } from "@sapper/app";
-  import { fade } from "svelte/transition";
   import { applicant, scorings, store } from "stores";
   import { sticky } from "actions/sticky";
 

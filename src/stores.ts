@@ -1,11 +1,11 @@
 // TODO typings
 // @ts-nocheck
+import type { Scoring, Scores, Filters, Store } from "typings/types";
 import { writable, derived, Writable, Readable } from "svelte/store";
 // import { number, object } from "yup";
 // import { ScoreModal } from "models/score";
 import { ApplicantModel } from "models/applicant";
 import { validateSchema } from "utils/scores";
-import { Scoring, Scores, Filters, Store } from "typings/types";
 
 export const applicant = writable<boolean | ApplicantModel>(false);
 export const applicants = writable<ApplicantModel[]>([]);

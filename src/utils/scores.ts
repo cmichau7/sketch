@@ -1,7 +1,7 @@
+import type { Scoring } from "typings/types";
+import type { ReaderTypeModel } from "models/reader-type";
+import type { ScoreModel } from "models/score";
 import { object, number, ObjectSchema } from "yup";
-import { ReaderTypeModel } from "models/reader-type";
-import { ScoreModel } from "models/score";
-import { Scoring, Scorings } from "typings/types";
 
 const getConstraints = (type: ReaderTypeModel): string => {
   const constraints =
@@ -94,7 +94,6 @@ export const validateSchema = (
     scorings.reduce((schema, model) => {
       let scorings = {};
       if (model.scoring) {
-        console.dir({ scorings: model.scoring }, { depth: null });
         for (const [key, scoring] of Object.entries<Scoring[string]>(
           // @ts-ignore
           model.scoring.get(model.shortname)

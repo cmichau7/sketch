@@ -1,10 +1,10 @@
+import type { Scorings } from "typings/types";
 import { Model, RelationMappings } from "objection";
 import { admissions } from "src/db.js";
 import { BaseModel } from "./base";
 
 import { Rubric, RubricModel } from "./rubric";
 import { Score, ScoreModel } from "./score";
-import { Scorings } from "typings/types";
 
 export class ReaderTypeModel extends BaseModel {
   name: string;

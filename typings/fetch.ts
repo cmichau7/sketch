@@ -1,8 +1,8 @@
-import {
+import type {
   RequestInit as NodeRequestInit,
   Response as NodeResponse,
 } from "node-fetch";
-import { Primitive } from "typings/types";
+import type { Primitive } from "typings/types";
 
 export type FetchData = {
   [key: string]: Primitive | FetchData | undefined;

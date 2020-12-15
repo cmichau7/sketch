@@ -1,4 +1,4 @@
-import { FetchRequest, FetchResponse, QueryString } from "typings/fetch";
+import type { FetchRequest, FetchResponse, QueryString } from "typings/fetch";
 
 const browser = typeof window !== "undefined";
 

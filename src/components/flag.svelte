@@ -11,7 +11,6 @@
   let error = false;
 
   function handleClick() {
-    console.log("clicked");
     show = true;
   }
 

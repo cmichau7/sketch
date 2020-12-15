@@ -1,11 +1,11 @@
 import passport from "passport";
-import { createHash } from "crypto";
+// import { createHash } from "crypto";
 //import bcrypt from "bcrypt";
 import { Strategy as Local } from "passport-local";
 // import { Strategy as Ldap } from "passport-ldapauth";
 
 import { User } from "models/user";
-import { urlencoded } from "body-parser";
+// import { urlencoded } from "body-parser";
 // import { createClient } from "ldapjs";
 
 // 'ldap' => array(

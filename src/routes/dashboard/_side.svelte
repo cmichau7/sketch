@@ -139,11 +139,6 @@
               {/if}
             </a>
           {/each}
-
-          {#each new Array(20) as arr}
-            <div class="h-10">test</div>
-          {/each}
-          <div class="h-10 bg-red-500">last</div>
         {/if}
       </nav>
     </div>

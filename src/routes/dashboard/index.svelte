@@ -1,7 +1,7 @@
 <script context="module">
   import { applicant, scorings } from "stores";
 
-  export async function preload(page, session) {
+  export async function preload() {
     applicant.set(false);
     scorings.set(false);
   }

@@ -1,6 +1,6 @@
 // import { Model } from "objection";
 import { admissions } from "src/db.js";
-import { BaseModel } from './base'
+import { BaseModel } from "./base";
 
 export class PoolModel extends BaseModel {
   // Table name is the only required property.

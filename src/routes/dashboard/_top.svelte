@@ -1,7 +1,4 @@
 <script>
-  import { fade } from "svelte/transition";
-  // import { easeIn } from "svelte/easing";
-
   import Avatar from "components/avatar.svelte";
   import Signout from "./_signout.svelte";
 
@@ -67,7 +64,6 @@
 
         <div class="hidden sm:block sm:ml-6">
           <div class="flex">
-
             <!-- <a
               href="#/"
               class="ml-4 px-3 py-2 rounded-sm text-sm font-medium leading-5
@@ -140,7 +136,6 @@
               <Avatar />
             </button>
            -->
-
           </div>
           {#if open}
             <!-- <div

@@ -1,5 +1,5 @@
 import { admissions } from "src/db.js";
-import { BaseModel } from './base'
+import { BaseModel } from "./base";
 
 export class NoteModel extends BaseModel {
   note_id: number;
@@ -9,7 +9,6 @@ export class NoteModel extends BaseModel {
   // Table name is the only required property.
   static tableName = "admissions_applicant_notes";
   static idColumn = "note_id";
-
 }
 
 export const Note = NoteModel.bindKnex(admissions);

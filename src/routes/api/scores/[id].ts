@@ -1,10 +1,10 @@
+import type { ReaderTypeModel } from "models/reader-type";
 import { ReaderGroup } from "models/reader-group";
-import { ReaderTypeModel } from "models/reader-type";
-import { RubricModel } from "models/rubric";
 import { formatConstraints } from "utils/scores";
-import { Request, Response } from "express";
+import type { Request, Response } from "express";
 
 export async function get(req: Request, res: Response): Promise<void> {
+  // @ts-expect-error: User not defined on session.
   if (!req.session?.user) {
     res.status(403);
     res.json({

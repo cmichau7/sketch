@@ -1,9 +1,6 @@
 import { admissions } from "src/db.js";
 import { BaseModel } from "./base";
 
-// import { Subpool } from "./subpool";
-import { ReaderType } from "./reader-type";
-
 export class RubricAnswerModel extends BaseModel {
   answer_id: number;
   rubric_id: number;

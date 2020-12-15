@@ -2,15 +2,12 @@
   // TODO cleanup / simplify
   import { goto, stores } from "@sapper/app";
   import { createForm } from "svelte-forms-lib";
-  import { object } from "yup";
   import { applicants, applicant, scorings, scores, schema } from "stores";
   import { post } from "src/api";
 
   import Flag from "components/flag.svelte";
 
   const { session } = stores();
-
-  let error = false;
 
   const {
     form,

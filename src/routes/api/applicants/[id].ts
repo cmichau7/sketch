@@ -1,11 +1,11 @@
+import type { Request, Response } from "express";
+import type { ReaderTypeModel } from "models/reader-type";
 import { Applicant, ApplicantModel } from "models/applicant";
 import { ReaderGroup, ReaderGroupModel } from "models/reader-group";
-import { ReaderTypeModel } from "models/reader-type";
-import { RubricModel } from "models/rubric";
-import { formatConstraints, formatScores } from "utils/scores";
-import { Request, Response } from "express";
+import { formatScores } from "utils/scores";
 
 export async function get(req: Request, res: Response): Promise<void> {
+  // @ts-expect-error: User not defined on session.
   if (!req.session?.user) {
     res.status(403);
     res.json({
@@ -17,7 +17,6 @@ export async function get(req: Request, res: Response): Promise<void> {
   }
 
   const { id } = req.params;
-  const { user } = req.session;
 
   try {
     const applicant = (await Applicant.query()
@@ -41,7 +40,10 @@ export async function get(req: Request, res: Response): Promise<void> {
       .modifyGraph("flags", (builder) => builder.where("deleted_date", null))
       .modifyGraph("notes", (builder) => builder.where("deleted_date", null))
       .modifyGraph("files", (builder) =>
-        builder.where("subtype", "detailsketch-topchoices")
+        builder
+          .where("deleted_date", null)
+          .andWhere("subtype", "topchoices")
+          .orderBy("file_num")
       )
       .first()) as ApplicantModel & ReaderGroupModel;
 

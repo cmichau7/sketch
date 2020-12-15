@@ -1,4 +1,5 @@
-import { Model, RelationMappings } from "objection";
+import type { RelationMappings } from "objection";
+import { Model } from "objection";
 import { admissions } from "src/db.js";
 import { BaseModel } from "./base";
 

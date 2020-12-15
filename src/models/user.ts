@@ -1,8 +1,10 @@
-import { Model, RelationMappings } from "objection";
+import type { RelationMappings } from "objection";
+import type { UserAccessModel } from "./user-access";
+import { Model } from "objection";
 import { auth } from "src/db.js";
 import { BaseModel } from "./base";
 
-import { UserAccess, UserAccessModel } from "./user-access";
+import { UserAccess } from "./user-access";
 
 export class UserModel extends BaseModel {
   id: number;

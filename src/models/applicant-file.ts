@@ -1,8 +1,10 @@
-import { Model, QueryBuilder, RelationMappings } from "objection";
+import type { QueryBuilder, RelationMappings } from "objection";
+import type { FlagModel } from "./flag";
+
+import { Model } from "objection";
 import { admissions } from "src/db.js";
 import { BaseModel } from "./base";
-
-import { Flag, FlagModel } from "./flag";
+import { Flag } from "./flag";
 
 export class ApplicantFileModel extends BaseModel {
   file_id: number;

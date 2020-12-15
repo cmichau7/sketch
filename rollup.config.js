@@ -30,30 +30,6 @@ const onwarn = (warning, onwarn) =>
 const dedupe = (importee) =>
   importee === "svelte" || importee.startsWith("svelte/");
 
-// const plugins = [
-//   require("postcss-import")(),
-//   require("tailwindcss"),
-//   require("autoprefixer"),
-//   ...(dev
-//     ? []
-//     : [
-//       require("cssnano")(),
-//       require("@fullhuman/postcss-purgecss")({
-//         content: ["./**/*.html", "./**/*.svelte"],
-//         defaultExtractor: (content) =>
-//           content.match(/[A-Za-z0-9-_:/]+/g) || [],
-//       }),
-//     ]),
-// ];
-
-// const preprocess = preprocessor({
-//   transformers: {
-//     postcss: {
-//       plugins,
-//     },
-//   },
-// });
-
 const preprocess = preprocessor({
   postcss: true,
   typescript: true,

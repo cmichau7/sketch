@@ -74,9 +74,9 @@ module.exports = {
         ],
       },
       spacing: {
-        "28": "6.5rem",
-        "92": "24rem",
-        "128": "32rem",
+        28: "6.5rem",
+        92: "24rem",
+        128: "32rem",
       },
       inset: {
         "-1": "-1px",
@@ -86,7 +86,7 @@ module.exports = {
       }),
       zIndex: {
         "-1": -1,
-        "100": 100,
+        100: 100,
       },
       boxShadow: {
         button: "inset 0 -3px 0 rgba(0, 0, 0, 0.2)",
@@ -95,4 +95,5 @@ module.exports = {
   },
   variants: {},
   plugins: [],
+  purge: false,
 };

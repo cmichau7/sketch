@@ -78,7 +78,7 @@ declare module "tailwindcss" {
     separator: string;
     theme: Theme;
     variants: Variants;
-    corePlugins: {};
+    corePlugins: Record<string, unknown>;
     plugins: [];
   }
 }

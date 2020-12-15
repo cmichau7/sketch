@@ -1,8 +1,10 @@
+import type { Request, Response } from "express";
 import { Applicant } from "models/applicant";
 // import { Setting } from "models/setting";
-import { Request, Response } from "express";
+import { ReaderGroup } from "src/models/reader-group";
 
 export async function get(req: Request, res: Response): Promise<void> {
+  // @ts-expect-error: User not defined on session.
   if (!req.session?.user) {
     res.status(403);
     res.json({
@@ -13,19 +15,33 @@ export async function get(req: Request, res: Response): Promise<void> {
     return;
   }
 
-  // const { flagged } = req.query;
-  const { user } = req.session;
+  // @ts-expect-error: User & Cycle not defined on session.
+  const { cycle, user } = req.session;
 
   try {
-    // TOOD fetch only user assigned applicants or only flagged if user admin.
+    //  Fetch all groups of current cycle if admin otherwise only assigned groups for the reader.
+    const groups =
+      user.role !== "admin"
+        ? Object.keys(user.groups)
+        : (
+            await ReaderGroup.query()
+              .select("group_id")
+              .withGraphJoined("[cycle]")
+              .modifyGraph("cycle", (builder) =>
+                builder.where("cycle_id", cycle)
+              )
+          ).map(({ group_id }) => group_id);
+
     // Fetch all applicants of current user
+    // @ts-expect-error: Subpools not defined on session.
+    const { subpools } = req?.session;
     const applicants = await Applicant.query()
       .alias("a")
       .select("a.applicant_id", "a.reference_number", "rg.group_id")
-      .whereIn("a.cycle_subpool_id", req?.session?.subpools)
+      .whereIn("a.cycle_subpool_id", subpools)
       .orderBy("a.reference_number")
       .joinRelated("readerGroup", { alias: "rg" })
-      .whereIn("rg.group_id", Object.keys(user.groups))
+      .whereIn("rg.group_id", groups)
       .withGraphJoined("[scores, flags, notes]")
       .modifyGraph("scores", (builder) => builder.where("deleted_date", null))
       .modifyGraph("flags", (builder) => builder.where("deleted_date", null))

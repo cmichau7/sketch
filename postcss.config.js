@@ -1,4 +1,4 @@
-const prod = process.env.NODE_ENV === "production"
+const prod = process.env.NODE_ENV === "production";
 
 module.exports = {
   plugins: [
@@ -7,14 +7,13 @@ module.exports = {
     require("autoprefixer"),
     ...(prod
       ? [
-        require("cssnano")(),
-        require("@fullhuman/postcss-purgecss")({
-          content: ["./**/*.html", "./**/*.svelte"],
-          defaultExtractor: (content) =>
-            content.match(/[A-Za-z0-9-_:/]+/g) || [],
-        }),
-      ]
-      : []
-    ),
-  ]
-}
+          require("cssnano")(),
+          require("@fullhuman/postcss-purgecss")({
+            content: ["./**/*.html", "./**/*.svelte"],
+            defaultExtractor: (content) =>
+              content.match(/[A-Za-z0-9-_:/]+/g) || [],
+          }),
+        ]
+      : []),
+  ],
+};

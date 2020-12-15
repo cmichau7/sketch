@@ -1,6 +1,6 @@
 import { Setting } from "models/setting";
 import { Cycle } from "models/cycle";
-import { Request, Response } from "express";
+import type { Request, Response } from "express";
 
 export async function get(req: Request, res: Response): Promise<void> {
   try {
@@ -24,7 +24,9 @@ export async function get(req: Request, res: Response): Promise<void> {
     );
 
     if (req.session) {
+      // @ts-expect-error: User not defined on session.
       req.session.cycle = cycle.cycle_id;
+      // @ts-expect-error: User not defined on session.
       req.session.subpools = subpools;
     }
 

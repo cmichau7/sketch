@@ -1,11 +1,14 @@
-import { Model, RelationMappings } from "objection";
+import type { RelationMappings } from "objection";
+import type { RubricAnswerModel } from "./rubric-answer";
+import type { ScoreModel } from "./score";
+import { Model } from "objection";
 import { admissions } from "src/db.js";
 import { BaseModel } from "./base";
 
+import { Score } from "./score";
+import { RubricAnswer } from "./rubric-answer";
 // import { Subpool } from "./subpool";
 // import { ReaderType } from "./reader-type";
-import { RubricAnswer, RubricAnswerModel } from "./rubric-answer";
-import { Score, ScoreModel } from "./score";
 
 export class RubricModel extends BaseModel {
   rubric_id: number;

@@ -1,14 +1,14 @@
-import { isDeepStrictEqual } from "util";
+import type { Request, Response } from "express";
+import type { UserAccessModel } from "models/user-access";
+import type { LoginInput, LoginResponse } from "typings/server";
+// import { isDeepStrictEqual } from "util";
 import api from "src/api";
 import { User, UserModel } from "models/user";
 import { Reader, ReaderModel } from "models/reader";
-import { UserAccessModel } from "models/user-access";
 // import { CycleSubpool } from "models/cycle-subpool";
 // import { ReaderType, ReaderTypeModel } from "models/reader-type";
 // import { ReaderGroup } from "models/reader-group";
 import { schema } from "routes/_signin";
-import { Request, Response } from "express";
-import { LoginInput, LoginResponse } from "typings/server";
 
 export async function post(req: Request, res: Response): Promise<void> {
   const { username, password }: LoginInput = req.body;
@@ -66,6 +66,8 @@ export async function post(req: Request, res: Response): Promise<void> {
         return;
       }
 
+      // @ts-expect-error: Subpools not defined on session.
+      const { subpools } = req?.session;
       const readers = await Reader.query()
         .alias("r")
         .select(
@@ -75,7 +77,7 @@ export async function post(req: Request, res: Response): Promise<void> {
           "r.email",
           "r.reader_type_id"
         )
-        .whereIn("r.cycle_subpool_id", req?.session?.subpools)
+        .whereIn("r.cycle_subpool_id", subpools)
         .where("r.proxy_id", user.id)
         .where("r.deleted_date", null)
         .withGraphFetched("[readerType]")
@@ -109,6 +111,7 @@ export async function post(req: Request, res: Response): Promise<void> {
 
       const data = { ...user, ...reader };
 
+      // @ts-expect-error: User not defined on session.
       if (req.session) req.session.user = data;
 
       res.json({ ok: true, message, data });

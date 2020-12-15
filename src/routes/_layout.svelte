@@ -29,4 +29,9 @@
   });
 </script>
 
+<style global>
+  @import '../assets/css/theme.css';
+</style>
+
+
 <slot />

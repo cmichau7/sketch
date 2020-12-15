@@ -56,9 +56,9 @@ CMD [ "run", "develop" ]
 FROM node:lts-slim AS production
 
 ARG DB_CLIENT=mysql2
-ARG DB_HOST=localhost:33010
+ARG DB_HOST=mariadb
 ARG DB_DATABASE=elentra_adm
-ARG DB_USER=root
+ARG DB_USER=elentra
 ARG DB_PASSWORD=password
 
 ENV NODE_ENV=production \
@@ -75,13 +75,15 @@ COPY --from=builder --chown=node:node \
 COPY --from=dependencies --chown=node:node \
   /var/www/html/sapper/static /var/www/html/sapper/static
 COPY --from=dependencies --chown=node:node \
+  /var/www/html/sapper/pdfs /var/www/html/sapper/pdfs
+COPY --from=dependencies --chown=node:node \
   /var/www/html/sapper/node_modules /var/www/html/sapper/node_modules
 COPY --from=dependencies --chown=node:node \
   /var/www/html/sapper/scripts /var/www/html/sapper/scripts
 
 USER node
 EXPOSE 3000
-VOLUME [ "/var/www/html/sapper" ]
+VOLUME [ "/var/www/html/sapper", "/var/www/html/sapper/pdfs" ]
 WORKDIR /var/www/html/sapper
 
 HEALTHCHECK --interval=30s --timeout=30s --start-period=30s \

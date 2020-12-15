@@ -1,8 +1,9 @@
+import type { CycleSubpoolModel } from "./cycle-subpool";
 import { Model, RelationMappings } from "objection";
 import { admissions } from "src/db.js";
 import { BaseModel } from "./base";
 
-import { CycleSubpool, CycleSubpoolModel } from "./cycle-subpool";
+import { CycleSubpool } from "./cycle-subpool";
 
 export class CycleModel extends BaseModel {
   cycle_id: number;

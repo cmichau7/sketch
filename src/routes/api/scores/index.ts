@@ -2,9 +2,10 @@ import { ReaderGroup } from "models/reader-group";
 import { ReaderType } from "models/reader-type";
 import { Score } from "models/score";
 import { isObject } from "utils/object";
-import { Request, Response } from "express";
+import type { Request, Response } from "express";
 
 export async function post(req: Request, res: Response): Promise<void> {
+  // @ts-expect-error: User not defined on session.
   if (!req.session?.user) {
     res.status(403);
     res.json({
@@ -15,6 +16,7 @@ export async function post(req: Request, res: Response): Promise<void> {
     return;
   }
 
+  // @ts-expect-error: User not defined on session.
   const { user } = req.session;
   const { applicant, scores } = req.body;
 

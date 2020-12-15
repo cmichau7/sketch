@@ -1,5 +1,5 @@
-import { Writable, Readable } from "svelte/store";
-import { ObjectSchema } from "yup";
+import type { Writable, Readable } from "svelte/store";
+import type { ObjectSchema } from "yup";
 
 // Generic
 export type Primitive = string | number | boolean;

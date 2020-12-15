@@ -1,7 +1,7 @@
 <script context="module">
   import { applicants } from "stores";
 
-  export async function preload(page, session) {
+  export async function preload(_page, session) {
     if (!session.user) {
       const { ok, data = [] } = await this.fetch(
         "/api/auth/guard"

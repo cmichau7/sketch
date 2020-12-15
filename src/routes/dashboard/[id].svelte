@@ -2,7 +2,7 @@
   import { applicant, scorings, scores } from "stores";
   import { isEmpty } from "utils/object";
 
-  export async function preload({ params }, session) {
+  export async function preload({ params }) {
     const { id } = params;
     const map = new Map();
 
@@ -34,9 +34,24 @@
 
       return score;
     });
-    
-    console.log(applicant.files);
-    data.pdf = applicant.files;
+
+    // Get last file path
+    let url;
+    ({ ok, url } = await this.fetch(
+      `/pdfs${data.files.reduce((_file, { path }) => path, "")}`
+    ));
+
+    console.log({
+      ok,
+      url,
+      include: url.includes(data.reference_number),
+      data,
+    });
+
+    if (ok && url.includes(data.reference_number)) {
+      data.pdf = url;
+    }
+
     applicant.set(data);
 
     const groupId = data.group_id;
@@ -90,32 +105,41 @@
   <div
     class="flex flex-col flex-1 relative z-0 overflow-y-auto focus:outline-none">
     {#if $applicant}
-      <object
-        class="min-h-64"
-        aria-label="pdf"
-        data={$applicant.pdf}
-        type="application/pdf"
-        width="100%"
-        height="100%">
-        <div class="flex flex-col justify-center items-center">
+      {#if $applicant.pdf}
+        <object
+          class="min-h-64"
+          aria-label="pdf"
+          data={$applicant.pdf}
+          type="application/pdf"
+          width="100%"
+          height="100%">
+          <div class="h-full flex flex-col justify-center items-center">
+            <p>
+              Unable to view embedded PDF on this device. You will need to
+              download the PDF to view.
+            </p>
+            <a
+              class="text-2xl text-secondary-500 font-heading font-bold
+              hover:text-secondary-600"
+              href="#{$applicant.pdf}"
+              download="{$segment}.pdf">
+              Download PDF
+            </a>
+          </div>
+        </object>
+      {:else}
+        <div class="h-full flex flex-col justify-center items-center">
           <p>
-            Unable to view embedded PDF on this device. You will need to
-            download the PDF to view.
+            Unable to find PDF on the server. Please contact the administrators.
           </p>
-          <a
-            class="text-2xl text-secondary-500 font-heading font-bold
-            hover:text-secondary-600"
-            href="#{$applicant.pdf}"
-            download="{$segment}.pdf">
-            Download PDF
-          </a>
         </div>
-      </object>
+      {/if}
     {:else}
-      <div class="flex flex-col items-center space-y-2">
-        <div class="flex h-screen w-full items-center justify-center -mt-32">
+      <div class="h-full flex flex-col items-center space-y-2">
+        <div class="flex w-full items-center justify-center -mt-32">
           <h3 class="text-3xl mt-16">
-            No Applicants found for reference number {$segment}.
+            No Applicants found for reference number
+            {$segment}.
           </h3>
 
           {#if firstApplicant}
@@ -133,7 +157,6 @@
               <p>You have no more applicants remaining on your list.</p>
             </div>
           {/if}
-
         </div>
       </div>
     {/if}
