@@ -47,24 +47,18 @@
   });
 
   $: updateInitialValues($scores);
-  // $: scores = createScores($form);
 
-  // $: console.dir({ $scores }, { depth: null });
-  $: types = $session.user.groups[$applicant.group_id];
-  $: canScore = (shortname) =>
-    types.some((type) => type.shortname === shortname);
-  //   // updateInitialValues();
-  //   console.log({ $form });
-  // }
+  $: canScore = (shortname) => {
+    if ($session.user.role === 'admin') {
+        return true;
+    }
 
-  // function handleBeforeUnload(e) {
-  //   console.log("\n\n\n\nbeforeUnload\n\n\n");
+    if ($session.user.groups && $session.user.groups[$applicant.group_id]) {
+      return $session.user.groups[$applicant.group_id].some((type) => type.shortname === shortname);
+    }
 
-  //   // Chrome
-  //   event.returnValue = "";
-
-  //   return "";
-  // }
+    return false;
+  }
 </script>
 
 <style>
@@ -92,28 +86,6 @@
             <h3 class="text-white">{name}</h3>
 
             <div class="flex space-x-2">
-              <!-- {#if 'min' in scorings && 'max' in scorings}
-                <label class="relative w-full" for="{shortname}-score">
-                  <div
-                    class="icon absolute top-0 left-0 flex items-center ml-2 h-8
-                    cursor-text">
-                    <span class="text-sm text-tertiary-500">Scr:</span>
-                  </div>
-
-                  <input
-                    id="{shortname}-score"
-                    name={shortname}
-                    class="w-20 border border-gray-400 text-secondary rounded
-                    px-2 pl-10 py-1"
-                    class:error={$errors[shortname]}
-                    type="number"
-                    readonly={$applicant.isFlagged || !canScore(shortname)}
-                    step="1"
-                    on:change={handleChange}
-                    on:blur={handleChange}
-                    bind:value={$form[shortname]} />
-                </label>
-              {:else} -->
               {#each Object.keys(scoring.get(shortname)) as key}
                 <label class="relative w-full" for="{shortname}-{key}">
                   <div

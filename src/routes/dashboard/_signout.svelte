@@ -7,11 +7,9 @@
   async function handleClick() {
     const { ok, message } = await post("/api/auth/signout");
 
-    console.log({ ok, message });
-
     if (ok) {
       delete $session.user;
-      goto("/");
+      await goto("/");
     }
   }
 </script>

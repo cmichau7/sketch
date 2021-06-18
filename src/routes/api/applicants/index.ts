@@ -22,15 +22,17 @@ export async function get(req: Request, res: Response): Promise<void> {
     //  Fetch all groups of current cycle if admin otherwise only assigned groups for the reader.
     const groups =
       user.role !== "admin"
-        ? Object.keys(user.groups)
+        ? Object.keys(user.groups || {})
         : (
             await ReaderGroup.query()
+              .alias("rg")
               .select("group_id")
               .withGraphJoined("[cycle]")
               .modifyGraph("cycle", (builder) =>
-                builder.where("cycle_id", cycle)
+                builder.where("cycle_id", cycle.cycle_id)
               )
-          ).map(({ group_id }) => group_id);
+              .where("rg.deleted_date", null)
+          ).map((group) => group.group_id);
 
     // Fetch all applicants of current user
     // @ts-expect-error: Subpools not defined on session.

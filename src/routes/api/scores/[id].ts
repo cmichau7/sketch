@@ -27,7 +27,8 @@ export async function get(req: Request, res: Response): Promise<void> {
       )
       .modifyGraph("rubric.answer", (builder) =>
         builder.select("text", "value").where("deleted_date", null)
-      )) as ReaderTypeModel[];
+      )
+      .orderBy("rt.name")) as ReaderTypeModel[];
 
     const scores = formatConstraints(types);
 

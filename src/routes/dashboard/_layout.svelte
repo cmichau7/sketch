@@ -14,6 +14,19 @@
       session.user = data;
     }
 
+    if (!session.cycle || !session.subpools) {
+      const { ok, data = {}, message = "" } = await this.fetch(
+        "/api/cycle"
+      ).then((res) => res.json());
+
+      if (!ok) {
+        console.log({ message });
+      }
+
+      session.cycle = data.cycle;
+      session.subpools = data.subpools;
+    }
+
     const { ok, data = [], message = "" } = await this.fetch(
       "/api/applicants"
     ).then((res) => res.json());

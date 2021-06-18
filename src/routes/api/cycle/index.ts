@@ -5,7 +5,7 @@ import type { Request, Response } from "express";
 export async function get(req: Request, res: Response): Promise<void> {
   try {
     const cycle = await Cycle.query()
-      .select("cycle_id")
+      .select("cycle_id", "year")
       .withGraphFetched("[cycleSubpool]")
       .modifyGraph("cycleSubpool", (builder) =>
         builder.select("cycle_subpool_id")
@@ -25,7 +25,7 @@ export async function get(req: Request, res: Response): Promise<void> {
 
     if (req.session) {
       // @ts-expect-error: User not defined on session.
-      req.session.cycle = cycle.cycle_id;
+      req.session.cycle = cycle;
       // @ts-expect-error: User not defined on session.
       req.session.subpools = subpools;
     }
@@ -33,7 +33,7 @@ export async function get(req: Request, res: Response): Promise<void> {
     res.json({
       ok: true,
       message: "success",
-      data: { cycle: cycle.cycle_id, subpools },
+      data: { cycle, subpools },
     });
   } catch (err) {
     console.error(err);

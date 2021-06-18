@@ -42,7 +42,7 @@ export async function get(req: Request, res: Response): Promise<void> {
       .modifyGraph("files", (builder) =>
         builder
           .where("deleted_date", null)
-          .andWhere("subtype", "topchoices")
+          .andWhere("subtype", "detailsketch-topchoices")
           .orderBy("file_num")
       )
       .first()) as ApplicantModel & ReaderGroupModel;

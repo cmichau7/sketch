@@ -22,7 +22,7 @@ export async function post(req: Request, res: Response): Promise<void> {
   }
 
   try {
-    const { status, message, id } = await api.post<LoginResponse>(
+    const { status, message, id, ...rest } = await api.post<LoginResponse>(
       "auth/client",
       {
         username,
@@ -32,6 +32,7 @@ export async function post(req: Request, res: Response): Promise<void> {
 
     // TODO Check request status put user data in current session
     if (status === "success") {
+      console.log({ id, rest })
       const user = (await User.query()
         .alias("u")
         .findById(id)
@@ -47,11 +48,8 @@ export async function post(req: Request, res: Response): Promise<void> {
           "a.role",
           "a.group"
         )
-        .joinRelated("access", { alias: "a" })
-        .where("a.role", "admin")
-        .orWhere("a.role", "reader")
-        .first()) as UserModel & UserAccessModel;
-
+        .joinRelated("access", { alias: "a" })) as UserModel & UserAccessModel;
+        
       if (!user) {
         res
           .status(403)
@@ -67,7 +65,7 @@ export async function post(req: Request, res: Response): Promise<void> {
       }
 
       // @ts-expect-error: Subpools not defined on session.
-      const { subpools } = req?.session;
+      const { subpools } = req ?.session;
       const readers = await Reader.query()
         .alias("r")
         .select(
@@ -123,14 +121,4 @@ export async function post(req: Request, res: Response): Promise<void> {
     console.error(err);
     res.status(400).json({ ok: false, message: `Request Error. ${err}` });
   }
-
-  // if (status === "success") req.session.user = user;
-  // res.setHeader("Content-Type", "application/json");
-  // res.json({ status, message, user });
-
-  // passport.authenticate("local", (err, user, info) => {
-  //   if (user) req.session.user = user;
-  //   console.log({ user, info });
-
-  // })(req, res, next);
 }

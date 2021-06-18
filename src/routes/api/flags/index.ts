@@ -1,6 +1,7 @@
 // import { Flag } from "models/flag";
-import { Applicant } from "models/applicant";
 import type { Request, Response } from "express";
+import type { ApplicantFileModel } from "models/applicant-file";
+import { Applicant } from "models/applicant";
 
 export async function post(req: Request, res: Response): Promise<void> {
   // @ts-expect-error: User not defined on session.
@@ -21,7 +22,7 @@ export async function post(req: Request, res: Response): Promise<void> {
   // TODO validate req.body
 
   try {
-    const flag = await Applicant.relatedQuery("applicantFile")
+    const flag = await Applicant.relatedQuery<ApplicantFileModel>("files")
       .for(applicant.applicant_id)
       .insertGraph(
         [
