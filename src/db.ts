@@ -1,17 +1,17 @@
 const {
   // Admissions DB
   DB_CLIENT = "mysql2",
-  DB_HOST = "mariadb",
+  DB_HOST = "137.122.238.121",
   DB_DATABASE = "elentra_adm",
-  DB_USER = "elentra",
-  DB_PASSWORD = "password",
+  DB_USER = "admissions",
+  DB_PASSWORD = "kjaef*@Y#GG2gdoudKh",
 
   // Auth DB
   DB_AUTH_CLIENT = "mysql2",
-  DB_AUTH_HOST = "mariadb",
-  DB_AUTH_DATABASE = "elentra_auth",
-  DB_AUTH_USER = "elentra",
-  DB_AUTH_PASSWORD = "password",
+  DB_AUTH_HOST = "137.122.238.121",
+  DB_AUTH_DATABASE = "elentra_adm_auth",
+  DB_AUTH_USER ="admissions",
+  DB_AUTH_PASSWORD = "kjaef*@Y#GG2gdoudKh",
 } = process.env;
 
 export const admissions = require("knex")({

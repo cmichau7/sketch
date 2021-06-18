@@ -47,7 +47,7 @@ WORKDIR /var/www/html/sapper
 HEALTHCHECK --interval=30s --timeout=30s --start-period=30s \
   CMD node scripts/healthcheck.js
 
-ENTRYPOINT [ "npp" ]
+ENTRYPOINT [ "npm" ]
 CMD [ "run", "develop" ]
 
 
@@ -62,7 +62,6 @@ ARG DB_USER=elentra
 ARG DB_PASSWORD=password
 
 ENV NODE_ENV=production \
-    DB_CLIENT=${DB_CLIENT} \
     DB_HOST=${DB_HOST} \
     DB_DATABASE=${DB_DATABASE} \
     DB_USER=${DB_USER} \

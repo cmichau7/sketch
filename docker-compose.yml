@@ -1,0 +1,197 @@
+# Elantra
+
+version: "2.4"
+
+services:
+  # mariadb:
+  #   image: mariadb:10.1
+  #   container_name: elentra-mariadb
+  #   env_file:
+  #     - ./services/.env
+  #     - ./services/mariadb/10.1/.env
+  #   ports:
+  #     - 3306:3306
+  #   networks:
+  #     - database
+  #   volumes:
+  #     - ./services//mariadb/10.1/initdb.d:/docker-entrypoint-initdb.d:ro
+  #     - mariadb_data:/var/lib/mysql
+  #   healthcheck:
+  #     test: [ "CMD", "mysqladmin", "ping", "-h", "localhost", "-u", "admissions", "-p$$MYSQL_ROOT_PASSWORD" ]
+  #     interval: 10s
+  #   restart: unless-stopped
+
+  # mssql:
+  #   image: mcr.microsoft.com/mssql/server:2017-latest-ubuntu
+  #   container_name: elentra-msslq
+  #   env_file:
+  #     - ./services/.env
+  #     - ./services/mssql-server/2017-latest-ubuntu/.env
+  #   ports:
+  #     - 1433:1433
+  #   networks:
+  #     - database
+  #   volumes:
+  #     # - ./services//mariadb/10.1/initdb.d:/docker-entrypoint-initdb.d:ro
+  #     - mssql_data:/var/opt/mssql
+  #   # healthcheck:
+  #   #   test: ["CMD", "/opt/mssql-tools/bin/sqlcmd", "-S", "localhost", "-U", "sa", "-P", "$$SA_PASSWORD", "-Q", "\"SELECT 1\""]
+  #   #   interval: 10s
+  #   restart: unless-stopped
+
+  # sketch-eval-prod:
+  #   build: ./lts-alpine
+  #   image: uottawa/sketch-eval:lts-alpine
+  #   container_name: elentra-sketch-eval-prod2
+  #   user: $UID:$GID
+  #   env_file:
+  #     - ./.env
+  #   ports:
+  #     - 3000:3000
+  #     - 10000:10000
+  #   networks:
+  #     - server
+  #     #- database
+  #  # depends_on:
+  #    # mariadb:
+  #     #  condition: service_healthy
+  #     # mssql:
+  #     #   condition: service_healthy
+  #   working_dir: /var/www/sketch-eval
+  #   volumes:
+  #     # - ./services/php/7.2-apache/httpd/php.ini:$PHP_INI_DIR/php.ini:ro
+  #     # - ./services/php/7.2-apache/httpd/sites-enabled:/etc/apache2/sites-enabled:ro
+  #     - .:/var/www/sketch-eval
+  #     - ~/services/elentra/src/admissions-uo/www-root/core/storage/admissions/2021/unzipped:/var/www/sketch-eval/pdfs
+  #   healthcheck:
+  #     test: [ "CMD", "node", "/var/www/sketch-eval/scripts/healthcheck.js" ]
+  #     interval: 10s
+  #   restart: unless-stopped
+
+  # php:
+  #   build: ./services/php/7.3-fpm-alpine
+  #   image: uottawa/php:elentra-7.3-fpm-alpine
+  #   container_name: elentra-php
+  #   user: $UID:$GID
+  #   ports:
+  #     - 9000:9000
+  #   networks:
+  #     - database
+  #     - server
+  #   depends_on:
+  #     mariadb:
+  #       condition: service_healthy
+  #   volumes:
+  #     # - ./services/php/7.1-fpm/php.ini:/usr/local/etc/php/php.ini:ro
+  #       - ./services/elentra/src:/var/www/
+  #   healthcheck:
+  #     test: [ "CMD", "healthcheck" ]
+  #     interval: 10s
+  #   restart: unless-stopped
+
+  # nginx:
+  #   image: nginx:stable-alpine
+  #   container_name: elentra-nginx
+  #   ports:
+  #     - 80:80
+  #     - 443:443
+  #   networks:
+  #     - server
+  #   extra_hosts:
+  #     - admissions-uo.localhost:127.0.0.1
+  #     - admissions-consortium.localhost:127.0.0.1
+  #     - admissions-uo-entrada.localhost:127.0.0.1
+  #   depends_on:
+  #     php:
+  #       condition: service_healthy
+  #     sketch-eval:
+  #       condition: service_healthy
+  #   volumes:
+  #     - ./services/nginx/stable-alpine/ssl:/etc/nginx/ssl:ro
+  #     - ./services/nginx/stable-alpine/nginx.conf:/etc/nginx/nginx.conf:ro
+  #     - ./services/nginx/stable-alpine/conf.d:/etc/nginx/conf.d:ro
+  #     - ./services/elentra/src:/var/www/
+  #   healthcheck:
+  #     test: ["CMD", "curl", "-fsSL", "http://localhost/", "||", "exit 1" ]
+  #     interval: 10s
+  #   restart: unless-stopped
+
+  # php:
+  #   build: ./services/php/7.2-apache
+  #   image: uottawa/php:elentra
+  #   container_name: elentra-httpd-php
+  #   env_file:
+  #     - ./services/.env
+  #     # - ./services/php/.env
+  #   ports:
+  #     - 80:80
+  #     - 443:443
+  #   networks:
+  #     server:
+  #       aliases:
+  #         - admissions-uo.localhost
+  #         - admissions-consortium.localhost
+  #         - admissions-uo-entrada.localhost
+  #     database:
+  #   depends_on:
+  #     mariadb:
+  #       condition: service_healthy
+  #     # mssql:
+  #     #   condition: service_healthy
+  #   volumes:
+  #     # - ./services/php/7.2-apache/httpd/php.ini:$PHP_INI_DIR/php.ini:ro
+  #     - ~/.ssh/id_omsas:/root/.ssh/id_rsa:ro
+  #     - ./services/php/7.2-apache/httpd/sites-enabled:/etc/apache2/sites-enabled:ro
+  #     - ./services/elentra/src:/var/www/
+  #     # - ./services/php/src/api-uo-entrada:/var/www/admissions-uo-entrada/www-root/core/library/vendor/entradapackages/entrada-1x-api:ro
+  #     # - ./services/php/src/api-uo:/var/www/admissions-uo/www-root/core/library/vendor/elantrapackages/elentra-1x-api:ro
+  #   healthcheck:
+  #     test: [ "CMD", "curl", "-fsSL", "http://localhost/", "||", "exit 1" ]
+  #     interval: 10s
+  #   restart: unless-stopped
+
+  # worker-elentra:
+  #   image: uottawa/php:elentra
+  #   container_name: elentra-worker
+  #   env_file:
+  #     - ./services/.env
+  #   networks:
+  #     - server
+  #     - database
+  #   extra_hosts:
+  #     - admissions-uo.localhost:127.0.0.1
+  #     - admissions-consortium.localhost:127.0.0.1
+  #     - admissions-uo-entrada.localhost:127.0.0.1
+  #   volumes:
+  #     - ./services/elentra/src:/var/www/
+  #   command:  bash -c "cd /var/www/admissions-uo/www-root/core/library/vendor/elentrapackages/elentra-1x-api && php artisan queue:work --tries=3 --queue=commands,emails,default --delay=5 database"
+  #   restart: unless-stopped
+
+  # worker-entrada:
+  #   image: uottawa/php:elentra
+  #   container_name: entrada-worker
+  #   env_file:
+  #     - ./services/.env
+  #   networks:
+  #     - server
+  #     - database
+  #   extra_hosts:
+  #     - admissions-uo.localhost:127.0.0.1
+  #     - admissions-consortium.localhost:127.0.0.1
+  #     - admissions-uo-entrada.localhost:127.0.0.1
+  #   volumes:
+  #     - ./services/elentra/src:/var/www/
+  #   command:  bash -c "cd /var/www/admissions-uo-entrada/www-root/core/library/vendor/entradapackages/entrada-1x-api && php artisan queue:work --tries=3 --queue=commands,emails,default --delay=5 database"
+  #   restart: unless-stopped
+
+networks:
+  # database:
+  #   name: elentra-database
+
+  server:
+    name: elentra-server
+
+  # mariadb_data:
+
+  # mssql_data:
+

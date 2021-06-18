@@ -3,8 +3,9 @@ import type { FetchRequest, FetchResponse, QueryString } from "typings/fetch";
 const browser = typeof window !== "undefined";
 
 export function url(endpoint: string, { qs }: QueryString): string {
-  const origin = browser ? window.location.origin : "http://php/api/v2/";
-  // : "http://shakespeare-admissions.med.uottawa.ca/api/v2/"
+  const origin = browser ? window.location.origin
+// : "http://php/api/v2/";
+   : "http://shakespeare-admissions.med.uottawa.ca/admissions/api/v2/";
 
   const url = new URL(`${origin}${endpoint}`);
 

@@ -1,6 +1,6 @@
 const { request } = require("http");
 
-const { HOST = "0.0.0.0", PORT = "3333" } = process.env;
+const { HOST = "0.0.0.0", PORT = "3000" } = process.env;
 
 const opts = {
   host: HOST,
